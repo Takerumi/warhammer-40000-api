@@ -2,8 +2,12 @@ const express = require('express')
 const http = require("http")
 const { ApolloServer, gql } = require('apollo-server-express')
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
+require('dotenv').config()
+
+const db = require('./db')
 
 const port = process.env.PORT || 4000
+const DB_HOST = process.env.DB_HOST
 
 let notes = [
     { id: '1', content: 'This is a note', author: 'Ann Dawn' },
@@ -55,6 +59,7 @@ const resolvers = {
 // настройка Apollo Server
 async function startApolloServer() {
     const app = express()
+    db.connect(DB_HOST)
     const httpServer = http.createServer(app)
     const server = new ApolloServer({ 
         typeDefs, 
