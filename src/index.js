@@ -5,18 +5,50 @@ const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 
 const port = process.env.PORT || 4000
 
+let notes = [
+    { id: '1', content: 'This is a note', author: 'Ann Dawn' },
+    { id: '2', content: 'This is another note', author: 'Harley Brew' },
+    { id: '3', content: 'Oh look, another note again', author: 'Bradley Cooper' }
+]
 
 // построение схемы с использованием языка схем GraphQL
 const typeDefs = gql`
+    type Note {
+        id: ID!
+        content: String!
+        author: String!
+    }
+
     type Query {
-        hello: String
+        hello: String!
+        notes: [Note!]!
+        note(id: ID!): Note!
+    }
+
+    type Mutation {
+        newNote(content: String!): Note!
     }
 `
 
 // предоставляем функцию разрешения для полей схемы
 const resolvers = {
     Query: {
-        hello: () => 'Hello WORLD'
+        hello: () => 'Hello World!!!',
+        notes: () => notes,
+        note: (parent, args) => {
+            return notes.find(note => note.id === args.id)
+        }
+    },
+    Mutation: {
+     newNote: (parent, args) => {
+         let noteValue = {
+             id: String(notes.length + 1),
+             content: args.content,
+             author: 'Borman Karlovich'
+         }
+         notes.push(noteValue)
+         return noteValue
+     }   
     }
 }
 
