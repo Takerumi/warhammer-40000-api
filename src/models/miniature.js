@@ -12,6 +12,10 @@ const miniatureSchema = new Schema(
             type: String,
             required: true
         }
+    },
+    {
+        // присваеваем полю updatedAt тип Date
+        timestamps: true
     }
 );
 

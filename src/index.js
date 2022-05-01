@@ -1,14 +1,14 @@
-const express = require('express')
-const http = require("http")
-const { ApolloServer, gql } = require('apollo-server-express')
+const express = require('express');
+const http = require('http');
+const { ApolloServer, gql } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
-require('dotenv').config()
+require('dotenv').config();
 
-const db = require('./db')
+const db = require('./db');
 const models = require('./models');
 
-const port = process.env.PORT || 4000
-const DB_HOST = process.env.DB_HOST
+const port = process.env.PORT || 4000;
+const DB_HOST = process.env.DB_HOST;
 
 // let miniatures = [
 //     { id: '1', name: 'AHRIMAN', move: '6', weaponSkill: '2+', ballisticSkill: '2+', strength: '4', toughness: '4', wounds: '6', attack: '5', leadership: '9', saveThrow: '3+', equipment: 'Ahriman is equipped with: inferno bolt pistol; Black Staff of Ahriman; frag grenades; krak grenades.'},
@@ -17,35 +17,37 @@ const DB_HOST = process.env.DB_HOST
 // ]
 
 // построение схемы с использованием языка схем GraphQL
-const typeDefs = require('./schema')
+const typeDefs = require('./schema');
 
 // предоставляем функцию разрешения для полей схемы
-const resolvers = require('./resolvers')
+const resolvers = require('./resolvers');
 
 // настройка Apollo Server
 async function startApolloServer() {
-    const app = express()
-    db.connect(DB_HOST)
-    const httpServer = http.createServer(app)
-    const server = new ApolloServer({ 
-        typeDefs, 
-        resolvers,
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-        context: () => {
-            // добавление моделей БД в context
-            return { models }
-        }
-    })
+  const app = express();
+  db.connect(DB_HOST);
+  const httpServer = http.createServer(app);
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context: () => {
+      // добавление моделей БД в context
+      return { models };
+    },
+  });
 
-await server.start();
+  await server.start();
 
-server.applyMiddleware({ app, path: '/api'})
+  server.applyMiddleware({ app, path: '/api' });
 
-app.get('/', (req, res) => res.send('Hello world'))
+  app.get('/', (req, res) => res.send('Hello world'));
 
-await new Promise(resolve => httpServer.listen({ port }, resolve))
-console.log(`GraphQL Server running at http://localhost:${port}${server.graphqlPath}`)
-return { server, app}
+  await new Promise((resolve) => httpServer.listen({ port }, resolve));
+  console.log(
+    `GraphQL Server running at http://localhost:${port}${server.graphqlPath}`
+  );
+  return { server, app };
 }
 
-startApolloServer()
+startApolloServer();

@@ -1,20 +1,31 @@
-const { gql } = require('apollo-server-express')
+const { gql } = require('apollo-server-express');
 
 module.exports = gql`
-type Miniature {
+  scalar DateTime
+
+  type Miniature {
     id: ID
     name: String
     equipment: String
-}
+    updatedAt: DateTime
+  }
 
-type Query {
+  type User {
+    id: ID!
+    username: String!
+    email: String!
+  }
+
+  type Query {
     miniatures: [Miniature]
     miniature(id: ID): Miniature
-}
+  }
 
-type Mutation {
+  type Mutation {
     newMiniature(equipment: String, name: String): Miniature!
     updateMiniature(id: ID!, equipment: String): Miniature!
     deleteMiniature(id: ID!): Boolean!
-}
-`
+    signUp(username: String!, email: String!, password: String!): String!
+    signIn(username: String!, email: String!, password: String!): String!
+  }
+`;

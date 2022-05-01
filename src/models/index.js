@@ -1,7 +1,9 @@
 const Miniature = require('./miniature')
+const User = require('./user')
 
 const models = {
-    Miniature
+    Miniature,
+    User
 }
 
 module.exports = models
