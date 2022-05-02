@@ -4,16 +4,19 @@ module.exports = gql`
   scalar DateTime
 
   type Miniature {
-    id: ID
-    name: String
+    id: ID!
+    name: String!
     equipment: String
-    updatedAt: DateTime
+    updatedAt: DateTime!
+    favoriteCount: Int
+    favoritedBy: [User]
   }
 
   type User {
     id: ID!
     username: String!
     email: String!
+    favorites: [Miniature]
   }
 
   type Query {
@@ -27,5 +30,6 @@ module.exports = gql`
     deleteMiniature(id: ID!): Boolean!
     signUp(username: String!, email: String!, password: String!): String!
     signIn(username: String!, email: String!, password: String!): String!
+    toggleFavorite(id: ID!): Miniature!
   }
 `;
