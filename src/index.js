@@ -42,7 +42,7 @@ async function startApolloServer() {
       const token = req.headers.authorization;
       // извлекаем пользователя с помощью токена
       const user = getUser(token);
-      console.log(user);
+      // console.log(user);
       // добавление моделей БД в context
       return { models, user };
     },

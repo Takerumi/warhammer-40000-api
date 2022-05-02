@@ -5,12 +5,19 @@ const {
   ForbiddenError,
 } = require('apollo-server-express');
 require('dotenv').config();
+const mongoose = require('mongoose')
 
 module.exports = {
-  newMiniature: async (parent, args, { models }) => {
+  newMiniature: async (parent, args, { models, user }) => {
+    // проверяем передан ли в контексте пользователь, если нет - выбрасываем AuthenticationError
+    if (!user) {
+      throw new AuthenticationError('You must be signed to create a miniature characteristics')
+    }
     return await models.Miniature.create({
       equipment: args.equipment,
       name: args.name,
+      // ссылка на id автора
+      author: mongoose.Types.ObjectId(user.id)
     });
   },
   deleteMiniature: async (parent, { id }, { models }) => {
