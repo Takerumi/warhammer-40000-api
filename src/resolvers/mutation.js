@@ -20,7 +20,11 @@ module.exports = {
       author: mongoose.Types.ObjectId(user.id)
     });
   },
-  deleteMiniature: async (parent, { id }, { models }) => {
+  deleteMiniature: async (parent, { id }, { models, user }) => {
+    if (!user) {
+      throw new AuthenticationError('You must be signed in to delete a miniature note')
+    }
+    // TODO: ввести проверку на административные права
     try {
       await models.Miniature.findOneAndRemove({ _id: id });
       return true;
@@ -28,7 +32,11 @@ module.exports = {
       return false;
     }
   },
-  updateMiniature: async (parent, { equipment, id }, { models }) => {
+  updateMiniature: async (parent, { equipment, id }, { models, user }) => {
+    if (!iser) {
+      throw new AuthenticationError('You must be signed in to update a miniature note')
+    }
+      // TODO: ввести проверку на административные права
     try {
       return await models.Miniature.findOneAndUpdate(
         {
