@@ -7,6 +7,7 @@ module.exports = gql`
     id: ID!
     name: String!
     equipment: String
+    author: User
     updatedAt: DateTime!
     favoriteCount: Int
     favoritedBy: [User]
@@ -16,12 +17,15 @@ module.exports = gql`
     id: ID!
     username: String!
     email: String!
+    miniatures: [Miniature!]!
     favorites: [Miniature]
   }
 
   type Query {
     miniatures: [Miniature]
     miniature(id: ID): Miniature
+    user(username: String!): User
+    users: [User]
   }
 
   type Mutation {
